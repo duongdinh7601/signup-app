@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Event Signup</title>
+    </head>
+    <body>
+        <h1>All Events</h1>
+
+        <ul>
+            {% for event_id, event in events.items() %}
+                <li>
+                    <strong>{{ event.name }}</strong> —
+                    <a href="/event/{{ event_id }}">View</a> |
+                    <a href="/signup/{{ event_id }}">Sign Up</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <a href="/create">Create New Event</a>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ event.name }} - Attendee List</title>
+</head>
+<body>
+    <h1>{{ event.name }}</h1>
+
+    <h2>Attendees</h2>
+    <ol>
+        {% for user in attendees %}
+            <li>{{ user.user_id }}</li>
+        {% endfor %}
+    </ol>
+
+    {% if waitlist %}
+        <h2>Waitlist</h2>
+        <ol>
+            {% for user in waitlist %}
+                <li>{{ user.user_id }}</li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+
+    <br><a href="/">← Back to Home</a>
+</body>
+</html>

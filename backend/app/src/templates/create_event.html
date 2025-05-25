@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Event</title>
+</head>
+<body>
+    <h1>Create a New Event</h1>
+
+    <form action="/create" method="post">
+        <label for="name">Event Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="max_attendees">Max Attendees (leave 0 for unlimited):</label><br>
+        <input type="number" id="max_attendees" name="max_attendees" min="0"><br><br>
+
+        <label for="organizer_name">Organizer Name:</label><br>
+        <input type="text" id="organizer_name" name="organizer_name" required><br><br>
+
+        <button type="submit">Create</button>
+    </form>
+
+    <br><a href="/">← Back to Home</a>
+</body>
+</html>
