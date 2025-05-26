@@ -1,3 +1,5 @@
+<!-- This is the webpage for creating an event -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,16 +9,62 @@
     <h1>Create a New Event</h1>
 
     <form action="/create" method="post">
+        <!-- Event Name -->
         <label for="name">Event Name:</label><br>
         <input type="text" id="name" name="name" required><br><br>
 
-        <label for="max_attendees">Max Attendees (leave 0 for unlimited):</label><br>
-        <input type="number" id="max_attendees" name="max_attendees" min="0"><br><br>
-
-        <label for="organizer_name">Organizer Name:</label><br>
+        <!-- Organizer -->
+        <label for="organizer_name">Organizer:</label><br>
         <input type="text" id="organizer_name" name="organizer_name" required><br><br>
 
-        <button type="submit">Create</button>
+        <!-- Dates and Time -->
+        <label for="date_start">Start Date (leave blank for TBD):</label><br>
+        <input type="date" id="date_start" name="date_start"><br><br>
+        
+        <label for="date_end">End Date (Not Required):</label><br>
+        <input type="date" id="date_end" name="date_end"><br><br>
+
+        <label for="time_start">Start Time:</label><br>
+        <select id="time_start" name="time_start">
+            <!-- Dropdown shows time in 30 minute intervals -->
+            <option value="TBD" selected>TBD</option>
+            {% for hour in range(0, 24) %}
+                {% set display_hour = 12 if (hour % 12) == 0 else hour % 12 %}
+                {% for minute in ['00', '30'] %}
+                    {% set ampm = 'AM' if hour < 12 else 'PM' %}
+                    {% set time_val = '{}:{} {}'.format(display_hour, minute, ampm) %}
+                    <option value="{{ time_val }}">{{ time_val }}</option>
+                {% endfor %}
+            {% endfor %}
+        </select><br><br>
+
+        <label for="time_end">End Time (Not Required):</label><br>
+        <select id="time_end" name="time_end">
+            <!-- Dropdown shows time in 30 minute intervals -->
+            <option value="" selected></option>  <!-- Default empty -->
+            {% for hour in range(0, 24) %}
+                {% set display_hour = 12 if (hour % 12) == 0 else hour % 12 %}
+                {% for minute in ['00', '30'] %}
+                    {% set ampm = 'AM' if hour < 12 else 'PM' %}
+                    {% set time_val = '{}:{} {}'.format(display_hour, minute, ampm) %}
+                    <option value="{{ time_val }}">{{ time_val }}</option>
+                {% endfor %}
+            {% endfor %}
+        </select><br><br>
+
+        <!-- Max Attendees -->
+        <label for="max_attendees">Max Attendees (leave blank for unlimited):</label><br>
+        <input type="number" id="max_attendees" name="max_attendees" min="0" placeholder="Leave blank for unlimited"><br><br>
+
+        <!-- Cost -->
+        <label for="cost">Cost per Attendee (leave blank if free):</label><br>
+        <div style="display: inline-flex; align-items: center;">
+            <span>$</span>
+            <input type="text" id="cost" name="cost"><br><br>
+        </div>
+
+        <br>
+        <br><button type="submit">Create Event</button>
     </form>
 
     <br><a href="/">← Back to Home</a>

@@ -1,3 +1,5 @@
+<!-- This is the webpage that displays an event and its attendees -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,6 +7,36 @@
 </head>
 <body>
     <h1>{{ event.name }}</h1>
+    
+    <p><strong>Date(s):</strong>
+        {% if event.date_start %}
+            {{ event.date_start.strftime('%B %d, %Y') }}
+        {% else %}
+            TBD
+        {% endif %}
+        {% if event.date_end %}
+            - {{ event.date_end.strftime('%B %d, %Y') }}
+        {% endif %}
+    </p>
+
+    <p><strong>Time:</strong>
+        {% if event.time_start %}
+            {{ event.time_start.strftime('%I:%M %p') }}
+        {% else %}
+            TBD
+        {% endif %}
+        {% if event.time_end %}
+            – {{ event.time_end.strftime('%I:%M %p') }}
+        {% endif %}
+    </p>
+
+    <p><strong>Max Attendees:</strong> {{ event.max_attendees if event.max_attendees is not none else "Unlimited" }}</p>
+    <p><strong>Cost (per attendee): </strong> 
+        {% if event.cost and event.cost != "Free" %}
+            ${{ event.cost }}
+        {% else %}
+            Free
+        {% endif %}</p>
 
     <h2>Attendees</h2>
     <ol>
