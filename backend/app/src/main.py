@@ -28,13 +28,17 @@ def create_event_form(request: Request):
 # receives form data from events creation page and allows user to input event information
 # creates a new event, automatically signs up the organizer, stores new event in events dictionary and redirects to homepage
 @app.post("/create")
-def create_event(name: str = Form(...), organizer_name: str = Form(...), date_start: Optional[str] = Form(None), date_end: Optional[str] = Form(None), time_start: Optional[str] = Form(None), time_end: Optional[str] = Form(None), max_attendees: Optional[str] = Form(None), cost: Optional[str] = Form(None)):
+def create_event(name: str = Form(...), organizer_name: str = Form(...), include_organizer: Optional[str] = Form(None),date_start: Optional[str] = Form(None), date_end: Optional[str] = Form(None), time_start: Optional[str] = Form(None), time_end: Optional[str] = Form(None), max_attendees: Optional[str] = Form(None), cost: Optional[str] = Form(None)):
     global event_id_counter
 
     max_attendees_int = int(max_attendees) if max_attendees and max_attendees.strip() != '0' else None
 
     event = Event(name=name, date_start=date_start if date_start and date_start != "TBD" else None, date_end=date_end if date_end and date_end != "" else None, time_start=time_start if time_start and time_start != "TBD" else None, time_end=time_end if time_end and time_end != "" else None, max_attendees=max_attendees_int, cost=cost or "Free")
-    event.add_signup(organizer_name)
+    
+    # include organizer in attendees only if box is checked
+    if include_organizer:
+        event.add_signup(organizer_name)
+        
     events[event_id_counter] = event
     event_id_counter += 1
     return RedirectResponse(url="/", status_code=302)
