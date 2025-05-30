@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from models.signup import Event
 from logic.sort_logic import get_attendees_and_waitlist
 from typing import Optional
+import re
 
 # set up FastAPI app and template system
 app = FastAPI()
@@ -31,14 +32,23 @@ def create_event_form(request: Request):
 def create_event(name: str = Form(...), organizer_name: str = Form(...), include_organizer: Optional[str] = Form(None),date_start: Optional[str] = Form(None), date_end: Optional[str] = Form(None), time_start: Optional[str] = Form(None), time_end: Optional[str] = Form(None), max_attendees: Optional[str] = Form(None), cost: Optional[str] = Form(None)):
     global event_id_counter
 
+    # validate cost
+    cost_cleaned = cost.strip() if cost else ""
+    if cost_cleaned:
+        if not re.match(r'^\d+(\.\d{1,2})?$', cost_cleaned):
+            raise HTTPException(status_code=400, detail="Invalid cost format. Use: XX or XX.xx.")
+        cost_formatted = f"${float(cost_cleaned):.2f}"
+    else:
+        cost_formatted = "Free"
+
     max_attendees_int = int(max_attendees) if max_attendees and max_attendees.strip() != '0' else None
 
-    event = Event(name=name, date_start=date_start if date_start and date_start != "TBD" else None, date_end=date_end if date_end and date_end != "" else None, time_start=time_start if time_start and time_start != "TBD" else None, time_end=time_end if time_end and time_end != "" else None, max_attendees=max_attendees_int, cost=cost or "Free")
+    event = Event(name=name, date_start=date_start if date_start and date_start != "TBD" else None, date_end=date_end if date_end and date_end != "" else None, time_start=time_start if time_start and time_start != "TBD" else None, time_end=time_end if time_end and time_end != "" else None, max_attendees=max_attendees_int, cost=cost_formatted)
     
     # include organizer in attendees only if box is checked
     if include_organizer:
         event.add_signup(organizer_name)
-        
+
     events[event_id_counter] = event
     event_id_counter += 1
     return RedirectResponse(url="/", status_code=302)
