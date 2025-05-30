@@ -5,8 +5,7 @@ Simple web app to create and sign up for events
 
 # Creating a new branch
 
-Create and checkout new branch
-git checkout -b <branch-name>
+git checkout -b <branch-name> --> create and checkout new branch
 
 # Pushing changes in git
 
