@@ -13,7 +13,17 @@
                 <li>
                     <strong>{{ event.name }}</strong>
                     {% if event.date_start %}
-                        ({{ event.date_start.strftime('%b %d, %Y') }})
+                        {% if event.date_end %}
+                            {% if event.date_start == event.date_end %}
+                                ({{ event.date_start.strftime('%b %d, %Y') }})
+                            {% elif event.date_start.year == event.date_end.year %}
+                                ({{ event.date_start.strftime('%b %d') }}–{{ event.date_end.strftime('%d, %Y') }})
+                            {% else %}
+                                ({{ event.date_start.strftime('%b %d, %Y') }} – {{ event.date_end.strftime('%b %d, %Y') }})
+                            {% endif %}
+                        {% else %}
+                            ({{ event.date_start.strftime('%b %d, %Y') }})
+                        {% endif %}
                     {% else %}
                         (TBD)
                     {% endif %}
