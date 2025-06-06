@@ -10,12 +10,15 @@
     
     <p><strong>Date(s):</strong>
         {% if event.date_start %}
-            {{ event.date_start.strftime('%B %d, %Y') }}
+            {% if event.date_end and event.date_start == event.date_end %}
+                {{ event.date_start.strftime('%B %d, %Y') }}
+            {% elif event.date_end %}
+                {{ event.date_start.strftime('%B %d, %Y') }} - {{ event.date_end.strftime('%B %d, %Y') }}
+            {% else %}
+                {{ event.date_start.strftime('%B %d, %Y') }}
+            {% endif %}
         {% else %}
             TBD
-        {% endif %}
-        {% if event.date_end %}
-            - {{ event.date_end.strftime('%B %d, %Y') }}
         {% endif %}
     </p>
 
@@ -33,7 +36,7 @@
     <p><strong>Max Attendees:</strong> {{ event.max_attendees if event.max_attendees is not none else "Unlimited" }}</p>
     <p><strong>Cost (per attendee): </strong> 
         {% if event.cost and event.cost != "Free" %}
-            ${{ event.cost }}
+            {{ event.cost }}
         {% else %}
             Free
         {% endif %}</p>
